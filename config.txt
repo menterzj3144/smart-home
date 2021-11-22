@@ -1,0 +1,2 @@
+[Weather]
+apikey = 5da5ca4640d01bbeb7754e2d4683f33a
