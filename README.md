@@ -4,10 +4,10 @@ App to run on Raspberry Pi and control smart devices on a local network
 ## TODO:
 #### Lights
 - [ ] Find all lights on the network
-- [ ] Turn lights on/off
-- [ ] Set light colors
-- [ ] Set light brightness/saturation/hue
-- [ ] Light group control
+- [x] Turn lights on/off
+- [x] Set light colors
+- [x] Set light brightness
+- [x] Light group control
 - [ ] All lights control
 
 #### Weather
