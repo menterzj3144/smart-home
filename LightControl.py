@@ -1,54 +1,62 @@
 from lifxlan import LifxLAN, RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, PURPLE, PINK, WHITE, COLD_WHITE, WARM_WHITE, GOLD
 
 
-def main():
-    lan = LifxLAN()
-
-    stop = False
-    while not stop:
-        user = input("\nEnter light group name, type ALL for all lights, or Q to quit: ")
-        if user == "q":
-            break
-        elif user.lower() == "all":
-            lights = lan.get_lights()
-        else:
-            lights = lan.get_devices_by_group(user).get_device_list()
-
-        if len(lights) == 0:
-            print("Group does not exist/has no devices.")
-        else:
-            light_menu(lights)
+lan = LifxLAN()
+lights = lan.get_devices_by_group("Bedroom").get_device_list()
+print("found", len(lights), "lights")
 
 
-def light_menu(lights):
-    print("Found", len(lights), "light(s).")
-    back = False
-    while not back:
-        print("\n1. Turn on/off lights")
-        print("2. Set lights to color")
-        print("3. Change light brightness")
-        user = input("Enter choice, or B to go back: ")
-        if user.lower() == "b":
-            return
+# def main():
+#
+#     stop = False
+#     while not stop:
+#         user = input("\nEnter light group name, type ALL for all lights, or Q to quit: ")
+#         if user == "q":
+#             break
+#         elif user.lower() == "all":
+#             lights = lan.get_lights()
+#         else:
+#             lights = lan.get_devices_by_group(user).get_device_list()
+#
+#         if len(lights) == 0:
+#             print("Group does not exist/has no devices.")
+#         else:
+#             light_menu(lights)
 
-        if user == "1":
-            set_power(lights)
-        elif user == "2":
-            set_color(lights)
-        elif user == "3":
-            change_brightness(lights)
+
+# def light_menu():
+#     print("Found", len(lights), "light(s).")
+#     back = False
+#     while not back:
+#         print("\n1. Turn on/off lights")
+#         print("2. Set lights to color")
+#         print("3. Change light brightness")
+#         user = input("Enter choice, or B to go back: ")
+#         if user.lower() == "b":
+#             return
+#
+#         if user == "1":
+#             set_power(lights)
+#         elif user == "2":
+#             set_color(lights)
+#         elif user == "3":
+#             change_brightness(lights)
 
 
-def set_power(lights):
+def set_power(power):
+    print("set power")
     for light in lights:
-        power = light.get_power()
         if power == 0:
-            light.set_power("on", False)
-        else:
-            light.set_power("off", False)
+            if light.get_power() != 0:
+                print("turning off")
+                light.set_power("off", False)
+        elif power == 1:
+            if light.get_power() == 0:
+                print("turning on")
+                light.set_power("on", False)
 
 
-def set_color(lights):
+def set_color():
     print("\n1. White")
     print("2. Red")
     print("3. Orange")
@@ -95,15 +103,12 @@ def set_color(lights):
             print(light.get_label(), "does not support color.")
 
 
-def change_brightness(lights):
-    user = int(input("\nEnter brightness percentage: "))
-    if user < 0 or user > 100:
+def change_brightness(brightness):
+    if brightness < 0 or brightness > 100:
         print("Invalid brightness level.")
     else:
-        brightness = user * .01 * 65535
+        brightness = brightness * .01 * 65535
         for light in lights:
             light.set_brightness(brightness, 2000, False)
 
 
-if __name__ == "__main__":
-    main()
